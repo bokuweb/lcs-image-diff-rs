@@ -1,0 +1,17 @@
+defaults: &defaults
+  working_directory: ~/lcs-image-diff-rs
+  docker:
+    - image: rustlang/rust:nightly
+      environment:
+        DISPLAY: ":99"
+
+version: 2
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout  
+      - run:
+          name: Test
+          command: |
+            rustup run nightly cargo test  

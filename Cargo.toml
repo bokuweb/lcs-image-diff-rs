@@ -1,0 +1,19 @@
+[package]
+name = "lcs-image-diff"
+version = "0.1.0"
+repository = "https://github.com/bokuweb/lcs-image-diff-rs"
+keywords = ["diff", "image", "lcs"]
+license = "MIT"
+readme = "README.md"
+authors = ["bokuweb <bokuweb12@gmail.com>"]
+description = "Image diff tool with LCS algorithm"
+
+[dependencies]
+image = "0.18.0"
+base64 = "0.9.0"
+lcs-diff = "0.1.1"
+clap = "2.30.0"
+
+[[bin]]
+name = "lcs-image-diff"
+path = "src/main.rs"
