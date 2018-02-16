@@ -27,7 +27,7 @@ lcs-image-diff path/to/before.png path/to/after.png path/to/diff.png
 | --------------- |---------------| -------------------- |
 | ![](https://github.com/bokuweb/lcs-image-diff-rs/blob/master/test/images/before.png?raw=true) | ![](https://github.com/bokuweb/lcs-image-diff-rs/blob/master/test/images/after.png?raw=true) |![](https://github.com/bokuweb/lcs-image-diff-rs/blob/master/test/images/diff.png?raw=true)|
 
-`lcs-image-diff` outputs marked before and after images. 
+`lcs-image-diff` outputs marked before and after images too. 
 
 | marked_before.png        | marked_after.png          |
 | --------------- |---------------|
