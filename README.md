@@ -3,6 +3,9 @@ Image diff tool with LCS algorithm. rust port of [murooka/go-diff-image](https:/
 
 [![CircleCI](https://circleci.com/gh/bokuweb/lcs-image-diff-rs/tree/master.svg?style=svg)](https://circleci.com/gh/bokuweb/lcs-image-diff-rs/tree/master)
 
+## Requirements
+- latest Rust (recommend [rustup](https://www.rustup.rs/))
+
 ## Installation
 
 ``` bash
