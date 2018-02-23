@@ -12,12 +12,6 @@ Image diff tool with LCS algorithm. rust port of [murooka/go-diff-image](https:/
 cargo install lcs-image-diff
 ```
 
-or
-
-``` bash
-cargon install --git https://github.com/bokuweb/lcs-image-diff-rs
-```
-
 ## Usage
 
 ```
