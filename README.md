@@ -1,6 +1,7 @@
 # lcs-image-diff
 Image diff tool with LCS algorithm. rust port of [murooka/go-diff-image](https://github.com/murooka/go-diff-image)
 
+[![](http://meritbadge.herokuapp.com/lcs-image-diff)](https://crates.io/crates/lcs-image-diff)
 [![CircleCI](https://circleci.com/gh/bokuweb/lcs-image-diff-rs/tree/master.svg?style=svg)](https://circleci.com/gh/bokuweb/lcs-image-diff-rs/tree/master)
 
 ## Requirements
