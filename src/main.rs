@@ -52,8 +52,8 @@ fn main() {
     }
     let marked_before = add_prefix_to_file_name(&before_image, &"marked_");
     let marked_after = add_prefix_to_file_name(&after_image, &"marked_");
-    save_marked_org_image(&marked_before, &mut before, (255, 0, 0), rate, &removed);
-    save_marked_org_image(&marked_after, &mut after, (0, 255, 0), rate, &added);
+    save_marked_org_image(&marked_before, &mut before, (255, 119, 119), rate, &removed);
+    save_marked_org_image(&marked_after, &mut after, (99, 195, 99), rate, &added);
     let width = cmp::max(before.dimensions().0, after.dimensions().0);
     save_diff_image(diff_image, width, &result, rate);
 }
