@@ -77,6 +77,8 @@ pub fn save_marked_org_image(filename: &str,
                              rate: f32,
                              indexes: &Vec<usize>) {
     let range = compute_range(indexes);
+    let path = Path::new(filename).parent().unwrap();
+    let _result = mkdirp(path);
     blend_diff_area(base, range, color, rate);
     let ref mut fout = File::create(filename).unwrap();
     base.save(fout, PNG).unwrap();
@@ -90,7 +92,9 @@ pub fn save_diff_image(filename: &str, width: u32, result: &Vec<DiffResult<Strin
     for (y, d) in result.iter().enumerate() {
         match d {
             &DiffResult::Added(ref a) => put_diff_pixels(y, &mut img, &a.data, (99, 195, 99), rate),
-            &DiffResult::Removed(ref r) => put_diff_pixels(y, &mut img, &r.data, (255, 119, 119), rate),
+            &DiffResult::Removed(ref r) => {
+                put_diff_pixels(y, &mut img, &r.data, (255, 119, 119), rate)
+            }
             &DiffResult::Common(ref c) => put_diff_pixels(y, &mut img, &c.data, (0, 0, 0), 0.0),
         }
     }
