@@ -38,7 +38,7 @@ fn blend_diff_area<G>(img: &mut G, ranges: Vec<(usize, usize)>, rgb: (u8, u8, u8
     where G: GenericImage<Pixel = Rgba<u8>>
 {
     for (y1, y2) in ranges {
-        for y in y1..y2 {
+        for y in y1..(y2 + 1) {
             for x in 0..img.dimensions().0 {
                 let p = img.get_pixel(x, y as u32);
                 let blended = blend(p, rgb, rate);
