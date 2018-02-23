@@ -89,8 +89,8 @@ pub fn save_diff_image(filename: &str, width: u32, result: &Vec<DiffResult<Strin
     let mut img: ImageBuffer<Rgba<u8>, Vec<u8>> = ImageBuffer::new(width, height);
     for (y, d) in result.iter().enumerate() {
         match d {
-            &DiffResult::Added(ref a) => put_diff_pixels(y, &mut img, &a.data, (0, 255, 0), rate),
-            &DiffResult::Removed(ref r) => put_diff_pixels(y, &mut img, &r.data, (255, 0, 0), rate),
+            &DiffResult::Added(ref a) => put_diff_pixels(y, &mut img, &a.data, (99, 195, 99), rate),
+            &DiffResult::Removed(ref r) => put_diff_pixels(y, &mut img, &r.data, (255, 119, 119), rate),
             &DiffResult::Common(ref c) => put_diff_pixels(y, &mut img, &c.data, (0, 0, 0), 0.0),
         }
     }

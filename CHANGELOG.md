@@ -1,5 +1,11 @@
 # CHANGELOG
 
+<a name="0.1.2"></a>
+## [0.1.2](https://github.com/bokuweb/lcs-image-diff-rs/compare/0.1.1...0.1.2) (2018-02-23)
+
+### Features
+
+* Modify default marked color
 
 <a name="0.1.1"></a>
 ## [0.1.1](https://github.com/bokuweb/lcs-image-diff-rs/compare/0.1.0...0.1.1) (2018-02-23)
