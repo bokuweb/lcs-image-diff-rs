@@ -23,7 +23,7 @@ use futures::{Future, future};
 use std::sync::{Arc, Mutex};
 
 static RATE: f32 = 100.0 / 256.0;
-fn main() {    
+fn main() {
     let app = App::new(crate_name!())
         .version(crate_version!())
         .author(crate_authors!())
@@ -74,14 +74,7 @@ fn main() {
                 save_marked_org_image(&marked_after, &mut after_clone.lock().unwrap(), (99, 195, 99), RATE, &added);
                 Ok(())
               });
-
-      let mut one = future::select_all(vec![before_thread, after_thread]);
-      while let Ok((_, _, remaining)) = one.wait() {
-          if remaining.is_empty() {
-              break;
-          }
-          one = future::select_all(remaining);
-      }
+      future::join_all(vec![before_thread, after_thread]).wait().unwrap();
     }
     
     let width = cmp::max(arc_before.lock().unwrap().dimensions().0, arc_after.lock().unwrap().dimensions().0);
