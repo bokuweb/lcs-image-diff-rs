@@ -1,6 +1,6 @@
 [package]
 name = "lcs-image-diff"
-version = "0.1.4"
+version = "0.1.5"
 repository = "https://github.com/bokuweb/lcs-image-diff-rs"
 license = "MIT"
 readme = "README.md"
