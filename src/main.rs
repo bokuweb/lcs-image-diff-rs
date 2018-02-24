@@ -1,6 +1,9 @@
 extern crate image;
 extern crate lcs_diff;
 extern crate base64;
+extern crate futures_cpupool;
+extern crate futures;
+
 #[macro_use]
 extern crate clap;
 
@@ -15,7 +18,11 @@ use image_creator::*;
 use diff::*;
 use rename::*;
 use clap::{App, Arg};
+use futures_cpupool::CpuPool;
+use futures::{Future, future};
+use std::sync::{Arc, Mutex};
 
+static RATE: f32 = 100.0 / 256.0;
 fn main() {
     let app = App::new(crate_name!())
         .version(crate_version!())
@@ -34,12 +41,12 @@ fn main() {
     let before_image = matches.value_of("before_image").unwrap();
     let after_image = matches.value_of("after_image").unwrap();
     let diff_image = matches.value_of("diff_image").unwrap();
-    let mut before = image::open(before_image).unwrap();
-    let mut after = image::open(after_image).unwrap();
+    let before = image::open(before_image).unwrap();
+    let after = image::open(after_image).unwrap();
+
     let compare_before = CompareImage::new(before.dimensions(), before.raw_pixels());
     let compare_after = CompareImage::new(after.dimensions(), after.raw_pixels());
     let result = diff(compare_before, compare_after);
-    let rate: f32 = 100.0 / 256.0;
 
     let mut added: Vec<usize> = Vec::new();
     let mut removed: Vec<usize> = Vec::new();
@@ -52,8 +59,24 @@ fn main() {
     }
     let marked_before = add_prefix_to_file_name(&before_image, &"marked_");
     let marked_after = add_prefix_to_file_name(&after_image, &"marked_");
-    save_marked_org_image(&marked_before, &mut before, (255, 119, 119), rate, &removed);
-    save_marked_org_image(&marked_after, &mut after, (99, 195, 99), rate, &added);
-    let width = cmp::max(before.dimensions().0, after.dimensions().0);
-    save_diff_image(diff_image, width, &result, rate);
+
+    let arc_before = Arc::new(Mutex::new(before)).clone();
+    let arc_after = Arc::new(Mutex::new(after)).clone();
+    let before_clone = arc_before.clone();
+    let after_clone = arc_after.clone();
+    {
+      let thread_pool = CpuPool::new_num_cpus();
+      let before_thread = thread_pool.spawn_fn(move || -> Result<(), ()> {
+                save_marked_org_image(&marked_before, &mut before_clone.lock().unwrap(), (255, 119, 119), RATE, &removed);
+                Ok(())
+              });
+      let after_thread = thread_pool.spawn_fn(move || -> Result<(), ()> {
+                save_marked_org_image(&marked_after, &mut after_clone.lock().unwrap(), (99, 195, 99), RATE, &added);
+                Ok(())
+              });
+      future::join_all(vec![before_thread, after_thread]).wait().unwrap();
+    }
+    
+    let width = cmp::max(arc_before.lock().unwrap().dimensions().0, arc_after.lock().unwrap().dimensions().0);
+    save_diff_image(diff_image, width, &result, RATE);
 }
