@@ -1,10 +1,11 @@
-use std::fs::File;
-use std::path::Path;
 use std::cmp;
 use super::image::*;
 use super::lcs_diff::*;
-use super::mkdir::*;
 use super::base64::decode;
+
+pub static BLACK: (u8, u8, u8) = (0, 0, 0);
+pub static RED: (u8, u8, u8) = (255, 119, 119);
+pub static GREEN: (u8, u8, u8) = (99, 195, 99);
 
 fn compute_range(r: &Vec<usize>) -> Vec<(usize, usize)> {
     let mut i = 0;
@@ -83,46 +84,37 @@ fn put_diff_pixels(
     }
 }
 
-pub fn save_marked_org_image(
-    filename: &str,
+pub fn mark_org_image(
     base: &mut DynamicImage,
     color: (u8, u8, u8),
     rate: f32,
     indexes: &Vec<usize>,
 ) {
     let range = compute_range(indexes);
-    let path = Path::new(filename).parent().unwrap();
-    let _result = mkdirp(path);
     blend_diff_area(base, range, color, rate);
-    let ref mut fout = File::create(filename).unwrap();
-    base.save(fout, PNG).unwrap();
 }
 
-pub fn save_diff_image(
-    filename: &str,
+pub fn get_diff_image(
     before_width: u32,
     after_width: u32,
     result: &Vec<DiffResult<String>>,
     rate: f32,
-) {
-    let path = Path::new(filename).parent().unwrap();
-    let _result = mkdirp(path);
+) -> DynamicImage {
     let height = result.len() as u32;
     let width = cmp::max(before_width, after_width);
     let mut img: ImageBuffer<Rgba<u8>, Vec<u8>> = ImageBuffer::new(width, height);
     for (y, d) in result.iter().enumerate() {
         match d {
             &DiffResult::Added(ref a) => {
-                put_diff_pixels(y, &mut img, after_width, &a.data, (99, 195, 99), rate)
+                put_diff_pixels(y, &mut img, after_width, &a.data, GREEN, rate)
             }
             &DiffResult::Removed(ref r) => {
-                put_diff_pixels(y, &mut img, before_width, &r.data, (255, 119, 119), rate)
+                put_diff_pixels(y, &mut img, before_width, &r.data, RED, rate)
             }
             &DiffResult::Common(ref c) => {
-                put_diff_pixels(y, &mut img, width, &c.data, (0, 0, 0), 0.0)
+                put_diff_pixels(y, &mut img, width, &c.data, BLACK, 0.0)
             }
         }
     }
-    let ref mut fout = File::create(filename).unwrap();
-    ImageRgba8(img).save(fout, PNG).unwrap();
+    ImageRgba8(img)
 }
