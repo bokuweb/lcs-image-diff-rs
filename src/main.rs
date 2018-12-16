@@ -9,7 +9,6 @@ extern crate clap;
 mod mkdir;
 mod rename;
 
-use std::fs::File;
 use std::path::Path;
 use image::*;
 use rename::*;
@@ -24,8 +23,7 @@ static RATE: f32 = 100.0 / 256.0;
 pub fn save_image(image: &DynamicImage, filename: &str) {
     let path = Path::new(filename).parent().unwrap();
     let _result = mkdirp(path);
-    let ref mut fout = File::create(filename).unwrap();
-    image.save(fout, PNG).unwrap();
+    image.save(filename).unwrap();
 }
 
 fn main() {
