@@ -56,7 +56,7 @@ fn main() {
     let marked_before = add_prefix_to_file_name(&before_image, &"marked_");
     let marked_after = add_prefix_to_file_name(&after_image, &"marked_");
 
-    let result = compare(&mut before, &mut after, RATE);
+    let result = compare(&mut before, &mut after, RATE).unwrap();
 
     {
         let thread_pool = CpuPool::new_num_cpus();

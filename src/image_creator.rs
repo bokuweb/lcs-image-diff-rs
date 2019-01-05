@@ -69,8 +69,8 @@ fn put_diff_pixels(
     data: &String,
     rgb: (u8, u8, u8),
     rate: f32,
-) {
-    let row = decode(data).unwrap();
+) -> Result<(), base64::DecodeError> {
+    let row = decode(data)?;
     for x in 0..img.dimensions().0 {
         let index = x as usize * 4;
         let pixel: Rgba<u8> = if row_width > x {
@@ -82,6 +82,7 @@ fn put_diff_pixels(
         };
         img.put_pixel(x as u32, y as u32, blend(pixel, rgb, rate));
     }
+    Ok(())
 }
 
 pub fn mark_org_image(
@@ -99,22 +100,22 @@ pub fn get_diff_image(
     after_width: u32,
     result: &Vec<DiffResult<String>>,
     rate: f32,
-) -> DynamicImage {
+) -> Result<DynamicImage, base64::DecodeError> {
     let height = result.len() as u32;
     let width = cmp::max(before_width, after_width);
     let mut img: ImageBuffer<Rgba<u8>, Vec<u8>> = ImageBuffer::new(width, height);
     for (y, d) in result.iter().enumerate() {
         match d {
             &DiffResult::Added(ref a) => {
-                put_diff_pixels(y, &mut img, after_width, &a.data, GREEN, rate)
+                put_diff_pixels(y, &mut img, after_width, &a.data, GREEN, rate)?
             }
             &DiffResult::Removed(ref r) => {
-                put_diff_pixels(y, &mut img, before_width, &r.data, RED, rate)
+                put_diff_pixels(y, &mut img, before_width, &r.data, RED, rate)?
             }
             &DiffResult::Common(ref c) => {
-                put_diff_pixels(y, &mut img, width, &c.data, BLACK, 0.0)
+                put_diff_pixels(y, &mut img, width, &c.data, BLACK, 0.0)?
             }
         }
     }
-    ImageRgba8(img)
+    Ok(ImageRgba8(img))
 }

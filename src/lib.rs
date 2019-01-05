@@ -8,12 +8,13 @@ mod image_creator;
 use diff::*;
 use image_creator::*;
 use image::*;
+pub use base64::DecodeError;
 
 pub fn compare(
     before: &mut DynamicImage,
     after: &mut DynamicImage,
     rate: f32
-) -> DynamicImage {
+) -> Result<DynamicImage, DecodeError> {
     let compare_before = CompareImage::new(before.dimensions(), before.raw_pixels());
     let compare_after = CompareImage::new(after.dimensions(), after.raw_pixels());
     let result = diff(compare_before, compare_after);
