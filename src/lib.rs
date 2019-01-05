@@ -10,6 +10,29 @@ use image_creator::*;
 use image::*;
 pub use base64::DecodeError;
 
+/// Accepts two mutable references to `image::DynamicImage` and rate.
+/// Returns diff `image::DynamicImage` and marks removed and added
+/// parts on input images.
+///
+/// # Examples
+///
+/// ```no_run
+/// extern crate image;
+/// # use std::error::Error;
+/// # fn main() -> Result<(), Box<Error>> {
+/// use lcs_image_diff::compare;
+///
+/// let mut before = image::open("before.png")?;
+/// let mut after = image::open("after.png")?;
+///
+/// let diff = compare(&mut before, &mut after, 100.0 / 256.0)?;
+///
+/// before.save("marked_before.png")?;
+/// after.save("marked_after.png")?;
+/// diff.save("diff.png")?;
+/// # Ok(())
+/// # }
+/// ```
 pub fn compare(
     before: &mut DynamicImage,
     after: &mut DynamicImage,

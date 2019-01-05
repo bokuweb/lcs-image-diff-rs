@@ -1,5 +1,5 @@
 # lcs-image-diff
-Image diff tool with LCS algorithm. rust port of [murooka/go-diff-image](https://github.com/murooka/go-diff-image)
+Image diff library and tool with LCS algorithm. rust port of [murooka/go-diff-image](https://github.com/murooka/go-diff-image)
 
 [![](http://meritbadge.herokuapp.com/lcs-image-diff)](https://crates.io/crates/lcs-image-diff)
 [![CircleCI](https://circleci.com/gh/bokuweb/lcs-image-diff-rs/tree/master.svg?style=svg)](https://circleci.com/gh/bokuweb/lcs-image-diff-rs/tree/master)
@@ -7,13 +7,39 @@ Image diff tool with LCS algorithm. rust port of [murooka/go-diff-image](https:/
 ## Requirements
 - latest Rust (recommend [rustup](https://www.rustup.rs/))
 
-## Installation
+## Library
+
+### Usage
+
+```toml
+# Cargo.toml
+[dependencies]
+image = "0.20"
+lcs-image-diff = { version = "0.1", default-features = false }
+```
+
+```rust
+use lcs_image_diff::compare;
+
+let mut before = image::open("before.png")?;
+let mut after = image::open("after.png")?;
+
+let diff = compare(&mut before, &mut after, 100.0 / 256.0)?;
+
+before.save("marked_before.png")?;
+after.save("marked_after.png")?;
+diff.save("diff.png")?;
+```
+
+## Binary
+
+### Installation
 
 ``` bash
 cargo install lcs-image-diff
 ```
 
-## Usage
+### Usage
 
 ```
 lcs-image-diff path/to/before.png path/to/after.png path/to/diff.png
@@ -25,7 +51,7 @@ lcs-image-diff path/to/before.png path/to/after.png path/to/diff.png
 | --------------- |---------------| -------------------- |
 | ![](https://github.com/bokuweb/lcs-image-diff-rs/blob/master/test/images/before.png?raw=true) | ![](https://github.com/bokuweb/lcs-image-diff-rs/blob/master/test/images/after.png?raw=true) |![](https://github.com/bokuweb/lcs-image-diff-rs/blob/master/test/images/diff.png?raw=true)|
 
-`lcs-image-diff` outputs marked before and after images too. 
+`lcs-image-diff` outputs marked before and after images too.
 
 | marked_before.png        | marked_after.png          |
 | --------------- |---------------|
