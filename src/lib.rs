@@ -5,10 +5,10 @@ extern crate lcs_diff;
 mod diff;
 mod image_creator;
 
-use diff::*;
-use image_creator::*;
-use image::*;
 pub use base64::DecodeError;
+use diff::*;
+use image::*;
+use image_creator::*;
 
 /// Accepts two mutable references to `image::DynamicImage` and rate.
 /// Returns diff `image::DynamicImage` and marks removed and added
@@ -36,10 +36,10 @@ pub use base64::DecodeError;
 pub fn compare(
     before: &mut DynamicImage,
     after: &mut DynamicImage,
-    rate: f32
+    rate: f32,
 ) -> Result<DynamicImage, DecodeError> {
-    let compare_before = CompareImage::new(before.dimensions(), before.raw_pixels());
-    let compare_after = CompareImage::new(after.dimensions(), after.raw_pixels());
+    let compare_before = CompareImage::new(before.dimensions(), before.clone().into_bytes());
+    let compare_after = CompareImage::new(after.dimensions(), after.clone().into_bytes());
     let result = diff(compare_before, compare_after);
 
     let mut added: Vec<usize> = Vec::new();

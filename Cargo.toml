@@ -6,11 +6,7 @@ license = "MIT"
 readme = "README.md"
 authors = ["bokuweb <bokuweb12@gmail.com>"]
 description = "Image diff tool with LCS algorithm"
-keywords = [
-    "diff",
-    "image",
-    "lcs",
-]
+keywords = ["diff", "image", "lcs"]
 
 [lib]
 name = "lcs_image_diff"
@@ -25,10 +21,10 @@ required-features = ["binary"]
 default = ["binary"]
 binary = ["futures", "futures-cpupool", "all_image_formats"]
 all_image_formats = [
-    "image/gif_codec",
+    "image/gif",
     "image/jpeg",
     "image/ico",
-    "image/png_codec",
+    "image/png",
     "image/pnm",
     "image/tga",
     "image/tiff",
@@ -36,7 +32,7 @@ all_image_formats = [
     "image/bmp",
     "image/hdr",
     "image/dxt",
-    "image/jpeg_rayon"
+    "image/jpeg_rayon",
 ]
 
 [dependencies]
@@ -44,5 +40,5 @@ base64 = "0.9.0"
 clap = "2.30.0"
 futures = { version = "0.1.18", optional = true }
 futures-cpupool = { version = "0.1.8", optional = true }
-image = { version = "0.20", default-features = false }
+image = { version = "0.24", default-features = false }
 lcs-diff = "0.1.1"
